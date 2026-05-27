@@ -132,9 +132,11 @@ class Dashboard {
     
     try {
       // تحميل المخزون
+      const storeId = typeof currentStoreId !== 'undefined' ? currentStoreId : '00000000-0000-0000-0000-000000000001'
       const { data: inventory } = await supabase
         .from('inventory')
         .select('product_id, stock_level, reorder_point')
+        .eq('store_id', storeId)
       
       if (inventory) {
         inventory.forEach(item => {
@@ -198,6 +200,9 @@ class Dashboard {
         schema: 'public',
         table: 'inventory'
       }, (payload) => {
+        // فلترة حسب المتجر النشط
+        if (payload.new.store_id !== currentStoreId) return
+
         this.liveInventory[payload.new.product_id] = {
           stock: payload.new.stock_level,
           reorderPoint: payload.new.reorder_point
@@ -234,6 +239,7 @@ class Dashboard {
         schema: 'public',
         table: 'sales'
       }, (payload) => {
+        if (payload.new.store_id !== currentStoreId) return
         this.totalSales++
         document.getElementById('totalSales').textContent = this.totalSales
         this.updateMetrics()
@@ -378,6 +384,32 @@ class Dashboard {
       details: message,
       created_at: new Date().toISOString()
     })
+  }
+
+  /**
+   * تحميل مخزون متجر محدد (Multi-Tenant)
+   */
+  async loadStoreInventory(storeId) {
+    if (!supabase) return
+
+    try {
+      const { data } = await supabase
+        .from('inventory')
+        .select('product_id, stock_level, reorder_point')
+        .eq('store_id', storeId)
+
+      if (data) {
+        this.liveInventory = {}
+        data.forEach(item => {
+          this.liveInventory[item.product_id] = {
+            stock: item.stock_level,
+            reorderPoint: item.reorder_point
+          }
+        })
+      }
+    } catch (error) {
+      console.error('Error loading store inventory:', error)
+    }
   }
   
   /**

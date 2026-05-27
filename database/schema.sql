@@ -92,6 +92,49 @@ CREATE TABLE stores (
 );
 
 -- ============================================
+-- تحديث: دعم Multi-Tenant
+-- ============================================
+
+-- 1. إضافة عمود store_id للجداول الرئيسية
+ALTER TABLE products ADD COLUMN store_id UUID REFERENCES stores(id) ON DELETE CASCADE DEFAULT NULL;
+ALTER TABLE inventory ADD COLUMN store_id UUID REFERENCES stores(id) ON DELETE CASCADE DEFAULT NULL;
+ALTER TABLE sales ADD COLUMN store_id UUID REFERENCES stores(id) ON DELETE CASCADE DEFAULT NULL;
+ALTER TABLE purchase_orders ADD COLUMN store_id UUID REFERENCES stores(id) ON DELETE CASCADE DEFAULT NULL;
+ALTER TABLE agent_logs ADD COLUMN store_id UUID REFERENCES stores(id) ON DELETE CASCADE DEFAULT NULL;
+
+-- 2. إدخال متاجر افتراضية
+INSERT INTO stores (id, name, code, address, is_active) VALUES
+  ('00000000-0000-0000-0000-000000000001', 'المتجر الرئيسي', 'STORE-001', 'الرياض - طريق الملك فهد', true),
+  ('00000000-0000-0000-0000-000000000002', 'فرع الدمام', 'STORE-002', 'الدمام - شارع الأمير محمد', true),
+  ('00000000-0000-0000-0000-000000000003', 'فرع جدة', 'STORE-003', 'جدة - طريق المدينة', true)
+ON CONFLICT (id) DO NOTHING;
+
+-- 3. تحديث البيانات الحالية لتنتمي للمتجر الرئيسي
+UPDATE products SET store_id = '00000000-0000-0000-0000-000000000001' WHERE store_id IS NULL;
+UPDATE inventory SET store_id = '00000000-0000-0000-0000-000000000001' WHERE store_id IS NULL;
+
+-- 4. إنشاء View لعرض مخزون كل متجر
+CREATE OR REPLACE VIEW store_inventory_view AS
+SELECT
+  s.name as store_name,
+  s.code as store_code,
+  p.sku,
+  p.name as product_name,
+  p.emoji,
+  i.stock_level,
+  i.reorder_point,
+  i.sales_velocity,
+  CASE
+    WHEN i.stock_level <= 5 THEN '🔴 خطر'
+    WHEN i.stock_level <= i.reorder_point THEN '⚠️ منخفض'
+    ELSE '✅ آمن'
+  END as status
+FROM stores s
+JOIN inventory i ON s.id = i.store_id
+JOIN products p ON i.product_id = p.id
+ORDER BY s.name, p.name;
+
+-- ============================================
 -- المؤشرات (Indexes)
 -- ============================================
 CREATE INDEX idx_inventory_product ON inventory(product_id);
@@ -101,6 +144,9 @@ CREATE INDEX idx_sales_date ON sales(sold_at DESC);
 CREATE INDEX idx_purchase_orders_status ON purchase_orders(status);
 CREATE INDEX idx_agent_logs_date ON agent_logs(created_at DESC);
 CREATE INDEX idx_agent_logs_level ON agent_logs(log_level);
+CREATE INDEX idx_inventory_store ON inventory(store_id);
+CREATE INDEX idx_sales_store ON sales(store_id);
+CREATE INDEX idx_products_store ON products(store_id);
 
 -- ============================================
 -- الدوال والإجراءات المخزنة (Functions)
