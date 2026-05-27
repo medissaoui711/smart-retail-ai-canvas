@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Smart Retail AI Canvas - نظام إدارة المخزون الذكي بالمحاكاة الفيزيائية">
+  <meta name="author" content="Smart Store Solutions">
+  <meta name="theme-color" content="#0a0a1a">
+  
+  <title>Smart Retail AI - نظام إدارة المخزون الذكي</title>
+  
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.1/dist/umd/supabase.min.js"></script>
+  
+  <!-- الأنماط -->
+  <link rel="stylesheet" href="css/dashboard.css">
+  
+  <!-- أيقونة -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+</head>
+<body>
+  <div class="main-container">
+    <!-- ============================================ -->
+    <!-- منطقة المحاكاة (Canvas)                      -->
+    <!-- ============================================ -->
+    <div class="canvas-section">
+      <div class="store-label">
+        🏪 Smart Store Simulation
+      </div>
+      <canvas id="storeCanvas"></canvas>
+    </div>
+    
+    <!-- ============================================ -->
+    <!-- لوحة التحكم (Dashboard)                      -->
+    <!-- ============================================ -->
+    <div class="dashboard-section">
+      <div class="dashboard-title">
+        🤖 AI Agent Control Panel
+      </div>
+      
+      <!-- حالة الوكيل الذكي -->
+      <div class="agent-status" id="agentStatus">
+        <div class="agent-emoji">🧠</div>
+        <div class="agent-text">
+          <span class="status-indicator status-active"></span>
+          Agent Active - Monitoring...
+        </div>
+      </div>
+      
+      <!-- المؤشرات الرئيسية -->
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-icon">📦</div>
+          <div class="metric-value text-info" id="totalStock">0</div>
+          <div class="metric-label">إجمالي المخزون</div>
+        </div>
+        
+        <div class="metric-card">
+          <div class="metric-icon">💰</div>
+          <div class="metric-value text-success" id="totalSales">0</div>
+          <div class="metric-label">إجمالي المبيعات</div>
+        </div>
+        
+        <div class="metric-card">
+          <div class="metric-icon">📊</div>
+          <div class="metric-value text-warning" id="salesVelocity">0</div>
+          <div class="metric-label">معدل البيع/دقيقة</div>
+        </div>
+        
+        <div class="metric-card">
+          <div class="metric-icon">🛒</div>
+          <div class="metric-value text-info" id="totalOrders">0</div>
+          <div class="metric-label">أوامر الشراء</div>
+        </div>
+      </div>
+      
+      <!-- مخطط المخزون -->
+      <div class="chart-container">
+        <canvas id="stockChart"></canvas>
+      </div>
+      
+      <!-- أزرار التحكم -->
+      <div class="control-section">
+        <div class="control-label">⚡ تحكم يدوي</div>
+        <div class="product-buttons">
+          <button class="product-btn" onclick="manualRestock('MLK-001')">
+            🥛 توريد حليب
+          </button>
+          <button class="product-btn" onclick="manualRestock('WTR-002')">
+            💧 توريد ماء
+          </button>
+          <button class="product-btn" onclick="manualRestock('BRD-003')">
+            🍞 توريد خبز
+          </button>
+          <button class="product-btn" onclick="manualRestock('EGG-004')">
+            🥚 توريد بيض
+          </button>
+          <button class="product-btn" onclick="manualRestock('APP-005')">
+            🍎 توريد تفاح
+          </button>
+        </div>
+      </div>
+      
+      <!-- سجل العمليات -->
+      <div class="logs-container" id="logsContainer">
+        <div class="logs-title">📋 Real-time Agent Logs</div>
+        <div id="logsList">
+          <div class="log-entry">
+            <span class="log-time">[--:--:--]</span>
+            <span class="log-info">⏳ في انتظار بدء النظام...</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- ============================================ -->
+  <!-- ملفات JavaScript                              -->
+  <!-- ============================================ -->
+  
+  <!-- التكوين -->
+  <script src="js/config.js"></script>
+  
+  <!-- كلاس المنتج -->
+  <script src="js/product.js"></script>
+  
+  <!-- إدارة Canvas -->
+  <script src="js/canvas.js"></script>
+  
+  <!-- إدارة Dashboard -->
+  <script src="js/dashboard.js"></script>
+  
+  <!-- نقطة البداية الرئيسية -->
+  <script src="js/main.js"></script>
+</body>
+</html>

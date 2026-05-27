@@ -1,0 +1,17 @@
+# ============================================
+# Smart Retail AI - Frontend Docker Image
+# ============================================
+
+FROM nginx:alpine
+
+# نسخ ملفات الواجهة
+COPY frontend/ /usr/share/nginx/html/
+
+# نسخ إعدادات nginx
+COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
+
+# كشف المنفذ 80
+EXPOSE 80
+
+# تشغيل nginx
+CMD ["nginx", "-g", "daemon off;"]

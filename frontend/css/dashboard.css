@@ -1,0 +1,417 @@
+/* ============================================ */
+/* Smart Retail AI Canvas - Dashboard Styles    */
+/* Version: 1.0                                 */
+/* ============================================ */
+
+:root {
+  --bg-primary: #0a0a1a;
+  --bg-secondary: #0d0d20;
+  --bg-card: #151530;
+  --bg-card-hover: #1a1a35;
+  --border-color: #2a2a4a;
+  --text-primary: #e0e0e0;
+  --text-secondary: #8888aa;
+  --accent-cyan: #4ECDC4;
+  --accent-red: #FF6B6B;
+  --accent-yellow: #FFD93D;
+  --accent-blue: #45B7D1;
+  --accent-orange: #FF8C42;
+  --accent-green: #2ED573;
+  
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+  
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
+}
+
+/* إعادة تعيين */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', 'Cairo', Tahoma, Geneva, Verdana, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  overflow: hidden;
+  direction: rtl;
+}
+
+/* الحاوية الرئيسية */
+.main-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+}
+
+/* منطقة Canvas */
+.canvas-section {
+  flex: 2;
+  position: relative;
+  background: radial-gradient(circle at center, #1a1a2e 0%, #0a0a1a 100%);
+  border-left: 2px solid var(--border-color);
+  min-width: 0;
+}
+
+#storeCanvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  cursor: default;
+}
+
+.store-label {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(10, 10, 26, 0.85);
+  backdrop-filter: blur(10px);
+  padding: 12px 24px;
+  border-radius: var(--radius-md);
+  font-size: 18px;
+  font-weight: bold;
+  border: 1px solid var(--accent-cyan);
+  color: var(--accent-cyan);
+  box-shadow: var(--shadow-md);
+  z-index: 10;
+}
+
+/* لوحة التحكم */
+.dashboard-section {
+  flex: 1;
+  min-width: 400px;
+  max-width: 480px;
+  background: var(--bg-secondary);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 20px;
+  gap: 16px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-color) transparent;
+}
+
+.dashboard-section::-webkit-scrollbar {
+  width: 6px;
+}
+
+.dashboard-section::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.dashboard-section::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 3px;
+}
+
+.dashboard-title {
+  text-align: center;
+  font-size: 22px;
+  font-weight: bold;
+  color: var(--accent-cyan);
+  padding-bottom: 16px;
+  border-bottom: 2px solid var(--border-color);
+  letter-spacing: 0.5px;
+}
+
+/* حالة الوكيل */
+.agent-status {
+  background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-card-hover) 100%);
+  padding: 20px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-normal);
+}
+
+.agent-status:hover {
+  border-color: var(--accent-cyan);
+  box-shadow: var(--shadow-md);
+}
+
+.agent-emoji {
+  font-size: 48px;
+  animation: agentPulse 2s ease-in-out infinite;
+}
+
+@keyframes agentPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+
+.agent-text {
+  font-size: 15px;
+  margin-top: 10px;
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+.status-indicator {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-left: 8px;
+  position: relative;
+}
+
+.status-active { 
+  background: var(--accent-cyan); 
+  box-shadow: 0 0 12px var(--accent-cyan);
+  animation: statusGlow 1.5s ease-in-out infinite;
+}
+
+.status-processing { 
+  background: var(--accent-yellow); 
+  box-shadow: 0 0 12px var(--accent-yellow);
+  animation: statusGlow 0.5s ease-in-out infinite;
+}
+
+@keyframes statusGlow {
+  0%, 100% { box-shadow: 0 0 8px currentColor; }
+  50% { box-shadow: 0 0 20px currentColor, 0 0 30px currentColor; }
+}
+
+/* المؤشرات */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.metric-card {
+  background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-card-hover) 100%);
+  padding: 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  text-align: center;
+  transition: all var(--transition-normal);
+  box-shadow: var(--shadow-sm);
+}
+
+.metric-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--accent-cyan);
+}
+
+.metric-icon {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.metric-value {
+  font-size: 32px;
+  font-weight: bold;
+  margin: 8px 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.metric-label {
+  font-size: 11px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.text-critical { color: var(--accent-red); }
+.text-warning { color: var(--accent-yellow); }
+.text-success { color: var(--accent-green); }
+.text-info { color: var(--accent-blue); }
+
+/* المخطط البياني */
+.chart-container {
+  background: var(--bg-card);
+  padding: 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  min-height: 220px;
+  position: relative;
+}
+
+.chart-container canvas {
+  max-height: 200px;
+}
+
+/* أزرار التحكم */
+.control-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.control-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.product-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.product-btn {
+  flex: 1;
+  min-width: 80px;
+  padding: 12px 8px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  cursor: pointer;
+  font-size: 13px;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+  font-family: inherit;
+}
+
+.product-btn:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--accent-cyan);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.product-btn:active {
+  transform: scale(0.97);
+}
+
+/* سجل العمليات */
+.logs-container {
+  background: #0a0a15;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  padding: 12px;
+  flex-grow: 1;
+  min-height: 200px;
+  max-height: 350px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-color) transparent;
+}
+
+.logs-container::-webkit-scrollbar {
+  width: 4px;
+}
+
+.logs-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.logs-container::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 2px;
+}
+
+.logs-title {
+  font-weight: bold;
+  margin-bottom: 12px;
+  color: var(--accent-cyan);
+  font-size: 14px;
+  position: sticky;
+  top: 0;
+  background: #0a0a15;
+  padding-bottom: 8px;
+  z-index: 1;
+}
+
+.log-entry {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 10.5px;
+  padding: 6px 8px;
+  margin-bottom: 4px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.02);
+  border-right: 2px solid transparent;
+  transition: all var(--transition-fast);
+  line-height: 1.5;
+}
+
+.log-entry:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.log-entry:last-child {
+  border-right-color: var(--accent-cyan);
+  animation: newLog 0.5s ease-out;
+}
+
+@keyframes newLog {
+  from {
+    background: rgba(78, 205, 196, 0.2);
+    border-right-color: var(--accent-cyan);
+  }
+  to {
+    background: rgba(255, 255, 255, 0.02);
+    border-right-color: transparent;
+  }
+}
+
+.log-time {
+  color: var(--accent-blue);
+  font-weight: bold;
+  font-size: 10px;
+}
+
+.log-critical { color: var(--accent-red); font-weight: bold; }
+.log-warning { color: var(--accent-yellow); }
+.log-success { color: var(--accent-green); }
+.log-info { color: var(--text-secondary); }
+
+/* تأثيرات إضافية */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.dashboard-section > * {
+  animation: fadeIn 0.4s ease-out;
+}
+
+/* استجابة للشاشات الصغيرة */
+@media (max-width: 1024px) {
+  .main-container {
+    flex-direction: column;
+  }
+  
+  .canvas-section {
+    flex: none;
+    height: 50vh;
+    border-left: none;
+    border-bottom: 2px solid var(--border-color);
+  }
+  
+  .dashboard-section {
+    flex: none;
+    min-width: unset;
+    max-width: unset;
+    height: 50vh;
+  }
+}
+
+@media (max-width: 600px) {
+  .metrics-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .product-buttons {
+    flex-direction: column;
+  }
+  
+  .metric-value {
+    font-size: 24px;
+  }
+}

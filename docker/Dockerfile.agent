@@ -1,0 +1,23 @@
+# ============================================
+# Smart Retail AI - Agent Docker Image
+# ============================================
+
+FROM node:18-alpine
+
+# إنشاء مجلد العمل
+WORKDIR /app
+
+# نسخ ملفات الوكيل
+COPY agent/package*.json ./
+
+# تثبيت الاعتماديات (إنتاج فقط)
+RUN npm ci --only=production
+
+# نسخ الكود
+COPY agent/ .
+
+# مستخدم غير root للأمان
+USER node
+
+# تشغيل الوكيل
+CMD ["node", "agent.js"]

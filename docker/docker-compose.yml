@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  # ============================================
+  # الواجهة الأمامية (Nginx)
+  # ============================================
+  frontend:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.frontend
+    container_name: smart-retail-frontend
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+    networks:
+      - smart-retail-network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:80"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ============================================
+  # الوكيل الذكي (Node.js)
+  # ============================================
+  agent:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.agent
+    container_name: smart-retail-agent
+    env_file:
+      - ../agent/.env
+    restart: unless-stopped
+    networks:
+      - smart-retail-network
+    depends_on:
+      - frontend
+    healthcheck:
+      test: ["CMD", "node", "-e", "process.exit(0)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  smart-retail-network:
+    driver: bridge
+    name: smart-retail-network

@@ -1,0 +1,21 @@
+{
+  "name": "smart-retail-frontend",
+  "version": "1.0.0",
+  "description": "Smart Retail AI Canvas - Frontend Dashboard",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve .",
+    "dev": "npx live-server --port=3000"
+  },
+  "keywords": [
+    "canvas",
+    "dashboard",
+    "retail",
+    "simulation"
+  ],
+  "author": "Smart Store Solutions",
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.2.1"
+  }
+}
